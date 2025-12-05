@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', env('APP_ENV') === 'production' ? 'mysql_production' : 'mysql_local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,26 +31,34 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'busy_timeout' => null,
-            'journal_mode' => null,
-            'synchronous' => null,
-            'transaction_mode' => 'DEFERRED',
-        ],
-
-        'mysql' => [
+        'mysql_local' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST_LOCAL', '127.0.0.1'),
+            'port' => env('DB_PORT_LOCAL', '3306'),
+            'database' => env('DB_DATABASE_LOCAL', 'sheet_music_db'),
+            'username' => env('DB_USERNAME_LOCAL', 'root'),
+            'password' => env('DB_PASSWORD_LOCAL', 'tester'),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'mysql_production' => [
+            'driver' => 'mysql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_HOST_PROD', 'srv1151.hstgr.io'),
+            'port' => env('DB_PORT_PROD', '3306'),
+            'database' => env('DB_DATABASE_PROD', 'u591255529_SheetMusicTRMS'),
+            'username' => env('DB_USERNAME_PROD', 'u591255529_admin_partTRMS'),
+            'password' => env('DB_PASSWORD_PROD', 'scoreResonanz28'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
