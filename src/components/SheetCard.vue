@@ -21,6 +21,9 @@
         <button class="action-btn download" @click="$emit('download-sheet')">
           <i class="fas fa-download"></i> Download
         </button>
+        <button class="action-btn add-to-event" @click="$emit('add-to-event')">
+          <i class="fas fa-calendar-plus"></i> Add to Event
+        </button>
       </div>
     </div>
   </div>
@@ -35,7 +38,7 @@ export default {
       required: true,
     },
   },
-  emits: ["view-sheet", "download-sheet"],
+  emits: ["view-sheet", "download-sheet", "add-to-event"],
 };
 </script>
 
@@ -137,5 +140,9 @@ export default {
 
 .action-btn.view {
   color: #2c3e50;
+}
+
+.action-btn.add-to-event {
+  color: #27ae60;
 }
 </style>

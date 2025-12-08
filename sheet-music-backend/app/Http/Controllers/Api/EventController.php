@@ -156,8 +156,8 @@ class EventController extends Controller
             ], 422);
         }
 
-        // Check if sheet music belongs to user
-        $sheetMusic = $request->user()->sheetMusic()->findOrFail($request->sheet_music_id);
+        // Check if sheet music exists (frontend already filters to public sheet music)
+        $sheetMusic = \App\Models\SheetMusic::findOrFail($request->sheet_music_id);
 
         $event->sheetMusic()->attach($request->sheet_music_id, [
             'order' => $request->order ?? 0,

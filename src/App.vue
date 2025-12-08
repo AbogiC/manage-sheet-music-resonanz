@@ -40,6 +40,7 @@
           :sheets="filteredSheets"
           @view-sheet="viewSheet"
           @download-sheet="downloadSheet"
+          @add-to-event="addToEvent"
         />
       </div>
     </div>
@@ -55,6 +56,13 @@
       @close="showEventsModal = false"
       @saved="onEventSaved"
     />
+
+    <AddToEventModal
+      :show="showAddToEventModal"
+      :sheet="selectedSheetForEvent"
+      @close="showAddToEventModal = false"
+      @added="onSheetAddedToEvent"
+    />
   </div>
 </template>
 
@@ -66,6 +74,7 @@ import FilterSidebar from "./components/FilterSidebar.vue";
 import SheetGrid from "./components/SheetGrid.vue";
 import UploadModal from "./components/UploadModal.vue";
 import EventModal from "./components/EventModal.vue";
+import AddToEventModal from "./components/AddToEventModal.vue";
 import api from "./services/api";
 
 export default {
@@ -77,6 +86,7 @@ export default {
     SheetGrid,
     UploadModal,
     EventModal,
+    AddToEventModal,
   },
   setup() {
     // App data
@@ -166,6 +176,8 @@ export default {
     // UI state
     const showUploadModal = ref(false);
     const showEventsModal = ref(false);
+    const showAddToEventModal = ref(false);
+    const selectedSheetForEvent = ref(null);
 
     // Computed properties
     const filteredSheets = computed(() => {
@@ -231,6 +243,15 @@ export default {
       alert("Event saved successfully!");
     };
 
+    const addToEvent = (sheet) => {
+      selectedSheetForEvent.value = sheet;
+      showAddToEventModal.value = true;
+    };
+
+    const onSheetAddedToEvent = () => {
+      alert("Sheet music added to event successfully!");
+    };
+
     return {
       appName,
       appDescription,
@@ -251,6 +272,8 @@ export default {
       downloadSheet,
       addSampleSheet,
       onEventSaved,
+      addToEvent,
+      onSheetAddedToEvent,
     };
   },
 };

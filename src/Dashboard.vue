@@ -46,6 +46,7 @@
           :sheets="filteredSheets"
           @view-sheet="viewSheet"
           @download-sheet="downloadSheet"
+          @add-to-event="addToEvent"
         />
       </div>
     </div>
@@ -63,6 +64,13 @@
     />
 
     <CategoryManager v-if="showCategories" @close="showCategories = false" />
+
+    <AddToEventModal
+      :show="showAddToEventModal"
+      :sheet="selectedSheetForEvent"
+      @close="showAddToEventModal = false"
+      @added="onSheetAddedToEvent"
+    />
   </div>
 </template>
 
@@ -76,6 +84,7 @@ import SheetGrid from "./components/SheetGrid.vue";
 import UploadModal from "./components/UploadModal.vue";
 import EventModal from "./components/EventModal.vue";
 import CategoryManager from "./components/CategoryManager.vue";
+import AddToEventModal from "./components/AddToEventModal.vue";
 import api from "./services/api";
 
 export default {
@@ -88,6 +97,7 @@ export default {
     UploadModal,
     EventModal,
     CategoryManager,
+    AddToEventModal,
   },
   setup() {
     const router = useRouter();
@@ -184,6 +194,8 @@ export default {
     const showUploadModal = ref(false);
     const showEventsModal = ref(false);
     const showCategories = ref(false);
+    const showAddToEventModal = ref(false);
+    const selectedSheetForEvent = ref(null);
 
     // Computed properties
     const filteredSheets = computed(() => {
@@ -250,6 +262,15 @@ export default {
       alert("Event saved successfully!");
     };
 
+    const addToEvent = (sheet) => {
+      selectedSheetForEvent.value = sheet;
+      showAddToEventModal.value = true;
+    };
+
+    const onSheetAddedToEvent = () => {
+      alert("Sheet music added to event successfully!");
+    };
+
     const handleLogout = async () => {
       try {
         await api.logout();
@@ -276,6 +297,8 @@ export default {
       showUploadModal,
       showEventsModal,
       showCategories,
+      showAddToEventModal,
+      selectedSheetForEvent,
       filteredSheets,
       totalSheets,
       toggleFilter,
@@ -284,6 +307,8 @@ export default {
       downloadSheet,
       addSampleSheet,
       onEventSaved,
+      addToEvent,
+      onSheetAddedToEvent,
       handleLogout,
     };
   },

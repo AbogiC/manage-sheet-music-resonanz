@@ -6,6 +6,7 @@
       :sheet="sheet"
       @view-sheet="$emit('view-sheet', sheet)"
       @download-sheet="$emit('download-sheet', sheet)"
+      @add-to-event="$emit('add-to-event', sheet)"
     />
   </div>
   <div v-else class="empty-state">
@@ -29,7 +30,7 @@ export default {
       required: true,
     },
   },
-  emits: ["view-sheet", "download-sheet"],
+  emits: ["view-sheet", "download-sheet", "add-to-event"],
 };
 </script>
 
