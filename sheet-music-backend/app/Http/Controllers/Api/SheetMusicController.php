@@ -32,6 +32,10 @@ class SheetMusicController extends Controller
             $query->byDifficulty($request->difficulty);
         }
 
+        if ($request->has('event') && $request->event) {
+            $query->byEvent($request->event);
+        }
+
         if ($request->has('search') && $request->search) {
             $query->search($request->search);
         }
@@ -56,7 +60,8 @@ class SheetMusicController extends Controller
         return response()->json([
             'instruments' => Category::getInstruments(),
             'genres' => Category::getGenres(),
-            'difficulties' => Category::getDifficulties()
+            'difficulties' => Category::getDifficulties(),
+            'events' => \App\Models\Event::select('id', 'name')->withoutTrashed()->get()
         ]);
     }
 

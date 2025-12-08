@@ -144,4 +144,25 @@ export default {
   getSheetMusicEvents(sheetMusicId) {
     return api.get(`/sheet-music/${sheetMusicId}/events`);
   },
+
+  // Categories
+  getCategories(params = {}) {
+    return api.get("/categories", { params });
+  },
+
+  getCategoriesGrouped() {
+    return api.get("/categories/grouped");
+  },
+
+  createCategory(data) {
+    return api.post("/categories", data);
+  },
+
+  updateCategory(id, data) {
+    return api.put(`/categories/${id}`, data);
+  },
+
+  deleteCategory(id) {
+    return api.delete(`/categories/${id}`);
+  },
 };

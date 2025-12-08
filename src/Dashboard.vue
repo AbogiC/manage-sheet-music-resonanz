@@ -18,11 +18,13 @@
         :instruments="instruments"
         :genres="genres"
         :difficulties="difficulties"
+        :events="events"
         :active-filters="activeFilters"
         @toggle-filter="toggleFilter"
         @clear-filters="clearFilters"
         @show-upload="showUploadModal = true"
         @show-events="showEventsModal = true"
+        @show-categories="showCategories = true"
       />
 
       <div class="content">
@@ -59,6 +61,8 @@
       @close="showEventsModal = false"
       @saved="onEventSaved"
     />
+
+    <CategoryManager v-if="showCategories" @close="showCategories = false" />
   </div>
 </template>
 
@@ -71,6 +75,7 @@ import FilterSidebar from "./components/FilterSidebar.vue";
 import SheetGrid from "./components/SheetGrid.vue";
 import UploadModal from "./components/UploadModal.vue";
 import EventModal from "./components/EventModal.vue";
+import CategoryManager from "./components/CategoryManager.vue";
 import api from "./services/api";
 
 export default {
@@ -82,6 +87,7 @@ export default {
     SheetGrid,
     UploadModal,
     EventModal,
+    CategoryManager,
   },
   setup() {
     const router = useRouter();
@@ -99,6 +105,7 @@ export default {
     const instruments = ref([]);
     const genres = ref([]);
     const difficulties = ref([]);
+    const events = ref([]);
     const stats = ref({
       total_sheets: 0,
       total_instruments: 0,
@@ -125,6 +132,7 @@ export default {
       if (activeFilters.value.genre) params.genre = activeFilters.value.genre;
       if (activeFilters.value.difficulty)
         params.difficulty = activeFilters.value.difficulty;
+      if (activeFilters.value.event) params.event = activeFilters.value.event;
       if (searchQuery.value) params.search = searchQuery.value;
       await fetchSheetMusic(params);
     };
@@ -135,6 +143,7 @@ export default {
         instruments.value = response.data.instruments;
         genres.value = response.data.genres;
         difficulties.value = response.data.difficulties;
+        events.value = response.data.events;
       } catch (error) {
         console.error("Error fetching filters:", error);
       }
@@ -154,6 +163,7 @@ export default {
       instrument: null,
       genre: null,
       difficulty: null,
+      event: null,
     });
 
     // Search query
@@ -173,6 +183,7 @@ export default {
     // UI state
     const showUploadModal = ref(false);
     const showEventsModal = ref(false);
+    const showCategories = ref(false);
 
     // Computed properties
     const filteredSheets = computed(() => {
@@ -195,6 +206,7 @@ export default {
         instrument: null,
         genre: null,
         difficulty: null,
+        event: null,
       };
       searchQuery.value = "";
     };
@@ -263,6 +275,7 @@ export default {
       searchQuery,
       showUploadModal,
       showEventsModal,
+      showCategories,
       filteredSheets,
       totalSheets,
       toggleFilter,

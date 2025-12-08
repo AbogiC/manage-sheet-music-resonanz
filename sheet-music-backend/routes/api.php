@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SheetMusicController;
 use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events/{eventId}/sheet-music', [\App\Http\Controllers\Api\EventController::class, 'addSheetMusic'])->middleware('auth:sanctum');
     Route::delete('/events/{eventId}/sheet-music/{sheetMusicId}', [\App\Http\Controllers\Api\EventController::class, 'removeSheetMusic'])->middleware('auth:sanctum');
     Route::put('/events/{eventId}/sheet-music/{sheetMusicId}', [\App\Http\Controllers\Api\EventController::class, 'updateSheetMusic'])->middleware('auth:sanctum');
+
+    // Category routes
+    Route::apiResource('categories', CategoryController::class);
+    Route::get('/categories/grouped', [CategoryController::class, 'getGrouped']);
 });

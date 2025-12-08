@@ -103,6 +103,16 @@ class SheetMusic extends Model
     }
 
     /**
+     * Scope a query to filter by event.
+     */
+    public function scopeByEvent($query, $eventId)
+    {
+        return $query->whereHas('events', function($q) use ($eventId) {
+            $q->where('events.id', $eventId);
+        });
+    }
+
+    /**
      * Scope a query to search in title, composer, or description.
      */
     public function scopeSearch($query, $search)

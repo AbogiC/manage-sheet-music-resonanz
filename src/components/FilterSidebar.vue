@@ -47,6 +47,21 @@
       </div>
     </div>
 
+    <div class="filter-group">
+      <div class="filter-title">Event</div>
+      <div class="filter-options">
+        <div
+          v-for="event in events"
+          :key="'event-' + event.id"
+          class="filter-tag"
+          :class="{ active: activeFilters.event === event.id }"
+          @click="$emit('toggle-filter', 'event', event.id)"
+        >
+          {{ event.name }}
+        </div>
+      </div>
+    </div>
+
     <div class="upload-section">
       <h3><i class="fas fa-cloud-upload-alt"></i> Upload Sheet Music</h3>
       <p>Upload PDFs and add metadata for organization</p>
@@ -60,6 +75,14 @@
       <p>Create and manage events for your sheet music</p>
       <button class="upload-btn" @click="$emit('show-events')">
         <i class="fas fa-calendar-plus"></i> Manage Events
+      </button>
+    </div>
+
+    <div class="upload-section">
+      <h3><i class="fas fa-tags"></i> Manage Categories</h3>
+      <p>Manage instruments, genres, and difficulties</p>
+      <button class="upload-btn" @click="$emit('show-categories')">
+        <i class="fas fa-cogs"></i> Manage Categories
       </button>
     </div>
 
@@ -87,12 +110,22 @@ export default {
       type: Array,
       required: true,
     },
+    events: {
+      type: Array,
+      required: true,
+    },
     activeFilters: {
       type: Object,
       required: true,
     },
   },
-  emits: ["toggle-filter", "clear-filters", "show-upload", "show-events"],
+  emits: [
+    "toggle-filter",
+    "clear-filters",
+    "show-upload",
+    "show-events",
+    "show-categories",
+  ],
 };
 </script>
 
