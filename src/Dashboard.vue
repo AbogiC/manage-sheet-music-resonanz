@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="container">
-    <Header :app-name="appName" :app-description="appDescription" />
+    <Header
+      :app-name="appName"
+      :app-description="appDescription"
+      @logout="handleLogout"
+    />
 
     <Stats
       :total-sheets="stats.total_sheets || 0"
@@ -60,6 +64,7 @@
 
 <script>
 import { ref, computed, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import Header from "./components/Header.vue";
 import Stats from "./components/Stats.vue";
 import FilterSidebar from "./components/FilterSidebar.vue";
@@ -69,7 +74,7 @@ import EventModal from "./components/EventModal.vue";
 import api from "./services/api";
 
 export default {
-  name: "App",
+  name: "Dashboard",
   components: {
     Header,
     Stats,
@@ -79,6 +84,8 @@ export default {
     EventModal,
   },
   setup() {
+    const router = useRouter();
+
     // App data
     const appName = ref("Sheet Music Organizer");
     const appDescription = ref(
@@ -231,6 +238,19 @@ export default {
       alert("Event saved successfully!");
     };
 
+    const handleLogout = async () => {
+      try {
+        await api.logout();
+      } catch (error) {
+        console.error("Logout error:", error);
+      } finally {
+        // Clear local storage and redirect to login
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        router.push("/login");
+      }
+    };
+
     return {
       appName,
       appDescription,
@@ -251,6 +271,7 @@ export default {
       downloadSheet,
       addSampleSheet,
       onEventSaved,
+      handleLogout,
     };
   },
 };

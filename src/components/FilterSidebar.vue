@@ -55,6 +55,14 @@
       </button>
     </div>
 
+    <div class="upload-section">
+      <h3><i class="fas fa-calendar-alt"></i> Manage Events</h3>
+      <p>Create and manage events for your sheet music</p>
+      <button class="upload-btn" @click="$emit('show-events')">
+        <i class="fas fa-calendar-plus"></i> Manage Events
+      </button>
+    </div>
+
     <div class="filter-group" style="margin-top: 25px">
       <button class="upload-btn clear-btn" @click="$emit('clear-filters')">
         <i class="fas fa-times"></i> Clear All Filters
@@ -84,7 +92,7 @@ export default {
       required: true,
     },
   },
-  emits: ["toggle-filter", "clear-filters", "show-upload"],
+  emits: ["toggle-filter", "clear-filters", "show-upload", "show-events"],
 };
 </script>
 

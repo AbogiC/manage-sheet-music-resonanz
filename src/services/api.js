@@ -107,4 +107,41 @@ export default {
   cancelUpload(data) {
     return api.post("/upload/cancel", data);
   },
+
+  // Events
+  getEvents(params = {}) {
+    return api.get("/events", { params });
+  },
+
+  getEventById(id) {
+    return api.get(`/events/${id}`);
+  },
+
+  createEvent(data) {
+    return api.post("/events", data);
+  },
+
+  updateEvent(id, data) {
+    return api.put(`/events/${id}`, data);
+  },
+
+  deleteEvent(id) {
+    return api.delete(`/events/${id}`);
+  },
+
+  addSheetMusicToEvent(eventId, data) {
+    return api.post(`/events/${eventId}/sheet-music`, data);
+  },
+
+  removeSheetMusicFromEvent(eventId, sheetMusicId) {
+    return api.delete(`/events/${eventId}/sheet-music/${sheetMusicId}`);
+  },
+
+  updateEventSheetMusic(eventId, sheetMusicId, data) {
+    return api.put(`/events/${eventId}/sheet-music/${sheetMusicId}`, data);
+  },
+
+  getSheetMusicEvents(sheetMusicId) {
+    return api.get(`/sheet-music/${sheetMusicId}/events`);
+  },
 };

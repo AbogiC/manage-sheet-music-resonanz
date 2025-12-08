@@ -37,4 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/sheet-music/{id}', [SheetMusicController::class, 'update']);
     Route::delete('/sheet-music/{id}', [SheetMusicController::class, 'destroy']);
     Route::get('/my-sheets', [SheetMusicController::class, 'mySheets']);
+    Route::get('/sheet-music/{id}/events', [SheetMusicController::class, 'getEvents']);
+
+    // Event routes
+    Route::apiResource('events', \App\Http\Controllers\Api\EventController::class)->middleware('auth:sanctum');
+    Route::post('/events/{eventId}/sheet-music', [\App\Http\Controllers\Api\EventController::class, 'addSheetMusic'])->middleware('auth:sanctum');
+    Route::delete('/events/{eventId}/sheet-music/{sheetMusicId}', [\App\Http\Controllers\Api\EventController::class, 'removeSheetMusic'])->middleware('auth:sanctum');
+    Route::put('/events/{eventId}/sheet-music/{sheetMusicId}', [\App\Http\Controllers\Api\EventController::class, 'updateSheetMusic'])->middleware('auth:sanctum');
 });

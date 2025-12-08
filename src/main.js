@@ -1,5 +1,6 @@
 import { createApp } from "vue";
-import App from "./App.vue";
+import App from "./AppNew.vue";
+import router from "./router";
 
 // Global styles
 import "./assets/style.css";
@@ -11,4 +12,4 @@ fontAwesomeLink.href =
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
 document.head.appendChild(fontAwesomeLink);
 
-createApp(App).mount("#app");
+createApp(App).use(router).mount("#app");

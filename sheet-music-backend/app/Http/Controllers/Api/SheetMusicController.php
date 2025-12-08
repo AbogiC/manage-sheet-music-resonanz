@@ -269,4 +269,21 @@ class SheetMusicController extends Controller
 
         return SheetMusicResource::collection($sheetMusic);
     }
+
+    /**
+     * Get events for a specific sheet music.
+     */
+    public function getEvents(Request $request, $id)
+    {
+        $sheetMusic = SheetMusic::findOrFail($id);
+
+        // Authorization check - user must own the sheet music
+        if ($request->user()->id !== $sheetMusic->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $events = $sheetMusic->events()->with('user')->get();
+
+        return response()->json($events);
+    }
 }

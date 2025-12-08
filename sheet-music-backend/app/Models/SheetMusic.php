@@ -129,4 +129,15 @@ class SheetMusic extends Model
     {
         $this->increment('download_count');
     }
+
+    /**
+     * Get the events this sheet music is associated with.
+     */
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_score')
+                    ->withPivot('order', 'notes')
+                    ->withTimestamps()
+                    ->orderBy('event_score.order');
+    }
 }
