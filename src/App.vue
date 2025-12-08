@@ -14,6 +14,7 @@
         :instruments="instruments"
         :genres="genres"
         :difficulties="difficulties"
+        :events="events"
         :active-filters="activeFilters"
         @toggle-filter="toggleFilter"
         @clear-filters="clearFilters"
@@ -102,6 +103,7 @@ export default {
     const instruments = ref([]);
     const genres = ref([]);
     const difficulties = ref([]);
+    const events = ref([]);
     const stats = ref({
       total_sheets: 0,
       total_instruments: 0,
@@ -138,6 +140,7 @@ export default {
         instruments.value = response.data.instruments;
         genres.value = response.data.genres;
         difficulties.value = response.data.difficulties;
+        events.value = response.data.events;
       } catch (error) {
         console.error("Error fetching filters:", error);
       }

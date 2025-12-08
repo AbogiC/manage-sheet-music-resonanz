@@ -47,7 +47,7 @@ class EventController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'event_date' => 'required|date|after:now',
+            'event_date' => 'required|date',
             'location' => 'nullable|string|max:255'
         ]);
 
@@ -98,7 +98,7 @@ class EventController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
-            'event_date' => 'sometimes|required|date|after:now',
+            'event_date' => 'sometimes|required|date',
             'location' => 'nullable|string|max:255'
         ]);
 

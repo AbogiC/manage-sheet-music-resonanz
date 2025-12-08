@@ -291,6 +291,7 @@ export default {
       instruments,
       genres,
       difficulties,
+      events,
       stats,
       activeFilters,
       searchQuery,
