@@ -69,11 +69,12 @@ export default {
     return api.get(`/sheet-music/${id}`);
   },
 
-  createSheetMusic(formData) {
+  createSheetMusic(formData, config = {}) {
     return api.post("/sheet-music", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      ...config,
     });
   },
 

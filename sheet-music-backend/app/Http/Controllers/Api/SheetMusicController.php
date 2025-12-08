@@ -86,68 +86,82 @@ class SheetMusicController extends Controller
      */
     public function store(Request $request)
     {
-        // Authentication check
-        if (!$request->user()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+        try {
+            // Authentication check
+            if (!$request->user()) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'composer' => 'required|string|max:255',
-            'arranger' => 'nullable|string|max:255',
-            'instrument' => 'required|string|max:100',
-            'genre' => 'required|string|max:100',
-            'difficulty' => 'required|in:Beginner,Intermediate,Advanced,Professional',
-            'pages' => 'required|integer|min:1',
-            'key' => 'nullable|string|max:50',
-            'time_signature' => 'nullable|string|max:20',
-            'tempo' => 'nullable|integer|min:1',
-            'description' => 'nullable|string',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
-            'is_public' => 'boolean',
-            'file' => 'required|file|mimes:pdf|max:51200' // 50MB
-        ]);
+            // Debug: Log all request data
+            error_log('Upload request data: ' . json_encode($request->all()));
+            error_log('Files in request: ' . json_encode($request->allFiles()));
+            error_log('Has file: ' . ($request->hasFile('file') ? 'true' : 'false'));
+            if ($request->hasFile('file')) {
+                error_log('File details: ' . json_encode($request->file('file')));
+            }
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Handle file upload
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('sheet-music', $fileName, 'public');
-
-            $sheetMusic = SheetMusic::create([
-                'user_id' => $request->user()->id,
-                'title' => $request->title,
-                'composer' => $request->composer,
-                'arranger' => $request->arranger,
-                'instrument' => $request->instrument,
-                'genre' => $request->genre,
-                'difficulty' => $request->difficulty,
-                'pages' => $request->pages,
-                'key' => $request->key,
-                'time_signature' => $request->time_signature,
-                'tempo' => $request->tempo,
-                'description' => $request->description,
-                'tags' => $request->tags,
-                'file_path' => $filePath,
-                'file_name' => $fileName,
-                'file_size' => $file->getSize(),
-                'is_public' => $request->boolean('is_public', true)
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string|max:255',
+                'composer' => 'required|string|max:255',
+                'arranger' => 'nullable|string|max:255',
+                'instrument' => 'required|string|max:100',
+                'genre' => 'required|string|max:100',
+                'difficulty' => 'required|in:Beginner,Intermediate,Advanced,Professional',
+                'pages' => 'required|integer|min:1',
+                'key' => 'nullable|string|max:50',
+                'time_signature' => 'nullable|string|max:20',
+                'tempo' => 'nullable|integer|min:1',
+                'description' => 'nullable|string',
+                'tags' => 'nullable|array',
+                'tags.*' => 'string|max:50',
+                'is_public' => 'boolean',
+                'file' => 'required|file|mimes:pdf|max:51200' // 50MB
             ]);
 
-            // Generate thumbnail from first page of PDF (requires additional package)
-            // $this->generateThumbnail($sheetMusic);
+            if ($validator->fails()) {
+                return response()->json([
+                    'errors' => $validator->errors()
+                ], 422);
+            }
 
-            return new SheetMusicResource($sheetMusic);
+            // Handle file upload
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('sheet-music', $fileName, 'public');
+
+                $sheetMusic = SheetMusic::create([
+                    'user_id' => $request->user()->id,
+                    'title' => $request->title,
+                    'composer' => $request->composer,
+                    'arranger' => $request->arranger,
+                    'instrument' => $request->instrument,
+                    'genre' => $request->genre,
+                    'difficulty' => $request->difficulty,
+                    'pages' => $request->pages,
+                    'key' => $request->key,
+                    'time_signature' => $request->time_signature,
+                    'tempo' => $request->tempo,
+                    'description' => $request->description,
+                    'tags' => $request->tags,
+                    'file_path' => $filePath,
+                    'file_name' => $fileName,
+                    'file_size' => $file->getSize(),
+                    'is_public' => $request->boolean('is_public', true)
+                ]);
+
+                // Generate thumbnail from first page of PDF (requires additional package)
+                // $this->generateThumbnail($sheetMusic);
+
+                return new SheetMusicResource($sheetMusic);
+            }
+
+            return response()->json(['message' => 'File upload failed'], 500);
+        } catch (\Exception $e) {
+            error_log('Error in upload processing: ' . $e->getMessage());
+            error_log('Stack trace: ' . $e->getTraceAsString());
+            return response()->json(['message' => 'Server error: ' . $e->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'File upload failed'], 500);
     }
 
     /**

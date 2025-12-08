@@ -16,13 +16,13 @@
       </div>
       <div class="sheet-actions">
         <button class="action-btn view" @click="$emit('view-sheet')">
-          <i class="fas fa-eye"></i> View
+          <i class="fas fa-eye"></i>
         </button>
         <button class="action-btn download" @click="$emit('download-sheet')">
-          <i class="fas fa-download"></i> Download
+          <i class="fas fa-download"></i>
         </button>
         <button class="action-btn add-to-event" @click="$emit('add-to-event')">
-          <i class="fas fa-calendar-plus"></i> Add to Event
+          <i class="fas fa-calendar-plus"></i>
         </button>
       </div>
     </div>

@@ -49,7 +49,7 @@
     <UploadModal
       v-if="showUploadModal"
       @close="showUploadModal = false"
-      @add-sample="addSampleSheet"
+      @uploaded="onSheetUploaded"
     />
 
     <EventModal
@@ -208,15 +208,37 @@ export default {
     };
 
     const viewSheet = (sheet) => {
-      alert(
-        `Viewing: ${sheet.title} by ${sheet.composer}\n\nIn a real app, this would open a PDF viewer.`
-      );
+      if (sheet.file_url) {
+        // Open PDF in new tab
+        window.open(sheet.file_url, "_blank");
+      } else {
+        alert("PDF file not available for preview.");
+      }
     };
 
-    const downloadSheet = (sheet) => {
-      alert(
-        `Downloading: ${sheet.title}\n\nIn a real app, this would download the PDF file.`
-      );
+    const downloadSheet = async (sheet) => {
+      try {
+        const response = await api.downloadSheetMusic(sheet.id);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", sheet.file_name || `${sheet.title}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Download failed:", error);
+        alert("Failed to download the file. Please try again.");
+      }
+    };
+
+    const onSheetUploaded = async (uploadedSheet) => {
+      // Refresh the sheet music list
+      await fetchFilteredSheetMusic();
+      await fetchStats();
+      showUploadModal.value = false;
+      alert("Sheet music uploaded successfully!");
     };
 
     const addSampleSheet = () => {
@@ -273,6 +295,7 @@ export default {
       clearFilters,
       viewSheet,
       downloadSheet,
+      onSheetUploaded,
       addSampleSheet,
       onEventSaved,
       addToEvent,

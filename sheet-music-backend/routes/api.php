@@ -23,6 +23,9 @@ Route::get('/sheet-music/stats', [SheetMusicController::class, 'getStats']);
 Route::get('/sheet-music/{id}', [SheetMusicController::class, 'show']);
 Route::get('/sheet-music/{id}/download', [SheetMusicController::class, 'download']);
 
+// Public category routes (needed for upload form)
+Route::get('/categories/grouped', [CategoryController::class, 'getGrouped']);
+
 // Upload routes (public for testing, should be protected in production)
 Route::post('/upload/chunk', [UploadController::class, 'uploadChunk']);
 Route::post('/upload/cancel', [UploadController::class, 'cancelUpload']);
@@ -48,5 +51,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Category routes
     Route::apiResource('categories', CategoryController::class);
-    Route::get('/categories/grouped', [CategoryController::class, 'getGrouped']);
 });
