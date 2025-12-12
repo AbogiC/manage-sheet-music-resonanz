@@ -145,6 +145,18 @@ export default {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .auth-header {
@@ -157,6 +169,43 @@ export default {
   margin: 0 0 10px 0;
   font-size: 2rem;
   font-weight: 600;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.auth-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  animation: bounceIn 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .auth-header p {
@@ -186,12 +235,16 @@ export default {
   border: 2px solid #e1e7f0;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .form-group input:focus {
   outline: none;
   border-color: #4a6491;
+  box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.1);
+  transform: translateY(-2px);
+  background: white;
 }
 
 .auth-btn {
